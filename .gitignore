@@ -1,0 +1,17 @@
+# 機密
+.env
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 大型或可重建的資料
+chroma_db/
+docs/
+eval_results/
+
+# 系統 / 編輯器
+.DS_Store
+.vscode/

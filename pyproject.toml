@@ -1,0 +1,32 @@
+[project]
+name = "hr-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "TzuJuLin", email = "jenny100486l@gmail.com" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "anthropic>=1.15.0",
+    "chromadb>=1.5.9",
+    "google-genai>=2.31.0",
+    "numpy<2",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.6",
+    "python-dotenv>=1.2.4",
+    "sentence-transformers<4",
+    "torch==2.2.2",
+    "transformers<4.50",
+]
+
+[project.scripts]
+hr-agent = "hr_agent:main"
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+required-environments = ["sys_platform == 'darwin' and platform_machine == 'x86_64'"]
+no-build-package = ["cryptography"]
