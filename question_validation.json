@@ -1,0 +1,400 @@
+[
+    {
+        "id": "eval_06_01",
+        "category": "Cross-Document Reasoning",
+        "variant": "原題",
+        "question": "一個月內請了 2 天事假，會影響當月的全勤獎金嗎？",
+        "ground_truth": "一般事假會按請假日數依比例扣減全勤獎金，公式為：2,000 ÷ 30 × 請假日數。因此請假 2 天會扣減 2,000 ÷ 30 × 2 = 133.33 元（即扣減約 133 元）。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 3
+            },
+            {
+                "doc": "HR-03",
+                "article": 5
+            }
+        ]
+    },
+    {
+        "id": "eval_06_02",
+        "category": "Cross-Document Reasoning",
+        "variant": "語氣",
+        "question": "我這個月請了兩天事假，這樣還有全勤嗎？",
+        "ground_truth": "一般事假會按請假日數依比例扣減全勤獎金，公式為：2,000 ÷ 30 × 請假日數。因此請假 2 天會扣減 2,000 ÷ 30 × 2 = 133.33 元（即扣減約 133 元）。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 3
+            },
+            {
+                "doc": "HR-03",
+                "article": 5
+            }
+        ]
+    },
+    {
+        "id": "eval_06_03",
+        "category": "Cross-Document Reasoning",
+        "variant": "換詞",
+        "question": "這個月請了兩天私事假，月底的全勤會被扣錢嗎？",
+        "ground_truth": "一般事假會按請假日數依比例扣減全勤獎金，公式為：2,000 ÷ 30 × 請假日數。因此請假 2 天會扣減 2,000 ÷ 30 × 2 = 133.33 元（即扣減約 133 元）。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 3
+            },
+            {
+                "doc": "HR-03",
+                "article": 5
+            }
+        ]
+    },
+    {
+        "id": "eval_06_04",
+        "category": "Cross-Document Reasoning",
+        "variant": "避開條文用語",
+        "question": "這個月家裡有事休了兩天，月底那筆滿勤的錢還拿得到嗎？",
+        "ground_truth": "一般事假會按請假日數依比例扣減全勤獎金，公式為：2,000 ÷ 30 × 請假日數。因此請假 2 天會扣減 2,000 ÷ 30 × 2 = 133.33 元（即扣減約 133 元）。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 3
+            },
+            {
+                "doc": "HR-03",
+                "article": 5
+            }
+        ]
+    },
+    {
+        "id": "eval_07_01",
+        "category": "Cross-Document Reasoning",
+        "variant": "原題",
+        "question": "生理假或生日假會不會影響全勤獎金？",
+        "ground_truth": "不會影響全勤獎金。生理假與生日假（公司福利假）均屬於「不影響全勤之假別」，請這兩種假仍可領取全勤獎金。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 4
+            },
+            {
+                "doc": "HR-04",
+                "article": 15
+            }
+        ]
+    },
+    {
+        "id": "eval_07_02",
+        "category": "Cross-Document Reasoning",
+        "variant": "語氣",
+        "question": "請生理假或生日假，還能領到全勤嗎？",
+        "ground_truth": "不會影響全勤獎金。生理假與生日假（公司福利假）均屬於「不影響全勤之假別」，請這兩種假仍可領取全勤獎金。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 4
+            },
+            {
+                "doc": "HR-04",
+                "article": 15
+            }
+        ]
+    },
+    {
+        "id": "eval_07_03",
+        "category": "Cross-Document Reasoning",
+        "variant": "換詞",
+        "question": "請經期假或壽星假，會被扣全勤獎金嗎？",
+        "ground_truth": "不會影響全勤獎金。生理假與生日假（公司福利假）均屬於「不影響全勤之假別」，請這兩種假仍可領取全勤獎金。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 4
+            },
+            {
+                "doc": "HR-04",
+                "article": 15
+            }
+        ]
+    },
+    {
+        "id": "eval_07_04",
+        "category": "Cross-Document Reasoning",
+        "variant": "避開條文用語",
+        "question": "月經來不舒服請一天假，或是生日當天公司給的那天休假，會害我拿不到滿勤嗎？",
+        "ground_truth": "不會影響全勤獎金。生理假與生日假（公司福利假）均屬於「不影響全勤之假別」，請這兩種假仍可領取全勤獎金。",
+        "relevant_articles": [
+            {
+                "doc": "HR-03",
+                "article": 4
+            },
+            {
+                "doc": "HR-04",
+                "article": 15
+            }
+        ]
+    },
+    {
+        "id": "eval_08_01",
+        "category": "Cross-Document Reasoning",
+        "variant": "原題",
+        "question": "若考核拿到D，調薪幅度與年終獎金分別是多少？",
+        "ground_truth": "考核為 D 時，年度調薪為「不調薪（0%）」，年終獎金的考核係數為 0.3。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 12
+            },
+            {
+                "doc": "HR-03",
+                "article": 8
+            }
+        ]
+    },
+    {
+        "id": "eval_08_02",
+        "category": "Cross-Document Reasoning",
+        "variant": "語氣",
+        "question": "年底考績拿到 D，調薪是幾趴？年終獎金可以拿多少？",
+        "ground_truth": "考核為 D 時，年度調薪為「不調薪（0%）」，年終獎金的考核係數為 0.3。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 12
+            },
+            {
+                "doc": "HR-03",
+                "article": 8
+            }
+        ]
+    },
+    {
+        "id": "eval_08_03",
+        "category": "Cross-Document Reasoning",
+        "variant": "換詞",
+        "question": "如果績效被打 D，明年還會加薪嗎？年終會打幾折？",
+        "ground_truth": "考核為 D 時，年度調薪為「不調薪（0%）」，年終獎金的考核係數為 0.3。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 12
+            },
+            {
+                "doc": "HR-03",
+                "article": 8
+            }
+        ]
+    },
+    {
+        "id": "eval_08_04",
+        "category": "Cross-Document Reasoning",
+        "variant": "避開條文用語",
+        "question": "績效評等拿到最差那一級，薪水還會往上調嗎？年底那筆分紅會少多少？",
+        "ground_truth": "考核為 D 時，年度調薪為「不調薪（0%）」，年終獎金的考核係數為 0.3。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 12
+            },
+            {
+                "doc": "HR-03",
+                "article": 8
+            }
+        ]
+    },
+    {
+        "id": "eval_09_01",
+        "category": "Cross-Document Reasoning",
+        "variant": "原題",
+        "question": "如果員工被指控職場性騷擾且經過查證是真的，最嚴重的懲罰是什麼？有相關條文嗎？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ]
+    },
+    {
+        "id": "eval_09_02",
+        "category": "Cross-Document Reasoning",
+        "variant": "語氣",
+        "question": "同事性騷擾被查證是真的，公司最重會怎麼處罰他？依據哪些規定？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ]
+    },
+    {
+        "id": "eval_09_03",
+        "category": "Cross-Document Reasoning",
+        "variant": "換詞",
+        "question": "員工性騷擾成立的話，公司可以直接開除他嗎？有哪些相關條文？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ]
+    },
+    {
+        "id": "eval_09_04",
+        "category": "Cross-Document Reasoning",
+        "variant": "避開條文用語",
+        "question": "有人在公司對同事毛手毛腳，調查後確定是真的，最嚴重會被怎麼處理？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ]
+    },
+    {
+        "id": "eval_10_01",
+        "category": "Cross-Document Reasoning",
+        "variant": "原題",
+        "question": "員工參加外部證照考試有補助報名費嗎？成功考取有沒有其他獎勵？",
+        "ground_truth": "報名費可全額補助，且若持有公告證照並於工作上使用，每月可領取 1,000 至 3,000 元的專業證照津貼。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 3
+            },
+            {
+                "doc": "HR-06",
+                "article": 14
+            }
+        ]
+    },
+    {
+        "id": "eval_10_02",
+        "category": "Cross-Document Reasoning",
+        "variant": "語氣",
+        "question": "考證照的報名費公司有補助嗎？考過了還有什麼獎勵？",
+        "ground_truth": "報名費可全額補助，且若持有公告證照並於工作上使用，每月可領取 1,000 至 3,000 元的專業證照津貼。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 3
+            },
+            {
+                "doc": "HR-06",
+                "article": 14
+            }
+        ]
+    },
+    {
+        "id": "eval_10_03",
+        "category": "Cross-Document Reasoning",
+        "variant": "換詞",
+        "question": "考專業證照的報名費能跟公司報帳嗎？考上之後每個月會多一筆錢嗎？",
+        "ground_truth": "報名費可全額補助，且若持有公告證照並於工作上使用，每月可領取 1,000 至 3,000 元的專業證照津貼。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 3
+            },
+            {
+                "doc": "HR-06",
+                "article": 14
+            }
+        ]
+    },
+    {
+        "id": "eval_10_04",
+        "category": "Cross-Document Reasoning",
+        "variant": "避開條文用語",
+        "question": "我想去考證照，費用公司會出嗎？考過的話薪水會變多嗎？",
+        "ground_truth": "報名費可全額補助，且若持有公告證照並於工作上使用，每月可領取 1,000 至 3,000 元的專業證照津貼。",
+        "relevant_articles": [
+            {
+                "doc": "HR-02",
+                "article": 3
+            },
+            {
+                "doc": "HR-06",
+                "article": 14
+            }
+        ]
+    },
+    {
+        "id": "eval_09_close_02",
+        "category": "Cross-Document Reasoning",
+        "question": "如果員工被指控職場性騷擾且經過查證是真的，情節重大者，懲罰為何？有相關條文嗎？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ],
+        "variant": "貼近條文用語"
+    },
+    {
+        "id": "eval_09_close_03",
+        "category": "Cross-Document Reasoning",
+        "question": "如果員工被指控職場性騷擾且經過查證是真的，可能受到多嚴厲的懲處？有相關條文嗎？",
+        "ground_truth": "最重處分為依勞基法第 12 條不經預告終止勞動契約（解僱）。依據為 HR-07 第 19 條及 HR-01 第 20、22 條。",
+        "relevant_articles": [
+            {
+                "doc": "HR-01",
+                "article": 20
+            },
+            {
+                "doc": "HR-01",
+                "article": 22
+            },
+            {
+                "doc": "HR-07",
+                "article": 19
+            }
+        ],
+        "variant": "貼近條文用語"
+    }
+]

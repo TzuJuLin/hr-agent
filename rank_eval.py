@@ -5,15 +5,17 @@ from pathlib import Path
  
 import pandas as pd
  
-from rag import rerank, retrieve
- 
+from rag import MAX_REF_ADD, TOP_K_RERANKED, expand_references, rerank, retrieve
+
 PROJECT_DIR = Path(__file__).resolve().parent
-QUESTIONS_FILE = PROJECT_DIR / "questions.json"
+QUESTIONS_FILE = PROJECT_DIR / "question_validation.json"
 OUTPUT_DIR = PROJECT_DIR / "eval_results"
- 
+
 TOP_K_RETRIEVED = 20          # retrieve 撈幾個候選
 RETRIEVE_KS = [5, 10, 20]     # 在 retrieve 結果上計算 recall@k
 RERANK_KS = [1, 3, 5]         # 在 rerank 結果上計算 recall@k
+TOP_K_CONTEXT = TOP_K_RERANKED  # 送給 LLM 的 rerank 名次數（再加上被引用的條文）
+CONTEXT = f"context@{TOP_K_CONTEXT}+ref"   # 欄位名稱用，例如 context@5+ref_recall
 
 def metric_name(stage: str, k: int) -> str:
     return f"{stage}_{'hit' if k == 1 else 'recall'}@{k}"
@@ -77,15 +79,22 @@ def evaluate_question(q: dict) -> tuple[dict, list[dict]]:
     retrieved = retrieve(q["question"], TOP_K_RETRIEVED)
     # 對全部候選重排，才能知道每個條文重排後的完整名次
     reranked = rerank(query=q["question"], retrieved_chunks=retrieved, top_k=len(retrieved))
- 
+    # 實際送給 LLM 的內容：rerank 前幾名 + 它們引用的條文
+    top = reranked[:TOP_K_CONTEXT]
+    referenced = expand_references(top)
+    context = top + referenced
+
     article_rows = []
-    retrieve_ranks, rerank_ranks = [], []
+    retrieve_ranks, rerank_ranks, in_context = [], [], []
     for ref in q["relevant_articles"]:
         #r1, r2是回傳的名次
         r1 = find_rank(retrieved, ref["doc"], ref["article"])
         r2 = find_rank(reranked, ref["doc"], ref["article"])
+        by_ref = find_rank(referenced, ref["doc"], ref["article"]) is not None
+        sent = r2 is not None and r2 <= TOP_K_CONTEXT
         retrieve_ranks.append(r1)
         rerank_ranks.append(r2)
+        in_context.append(sent or by_ref)
         article_rows.append({
             "題號": q["id"],
             "類別": q["category"],
@@ -94,6 +103,7 @@ def evaluate_question(q: dict) -> tuple[dict, list[dict]]:
             "retrieve名次": r1,
             "rerank名次": r2,
             "名次變化": (r1 - r2) if (r1 and r2) else None,  # 正數 = reranker 把它往前排
+            "送給LLM": f"前{TOP_K_CONTEXT}名" if sent else ("引用帶入" if by_ref else "未送出"),
         })
  
     row = {
@@ -118,16 +128,25 @@ def evaluate_question(q: dict) -> tuple[dict, list[dict]]:
         row["rerank_first_rank"] = first_rank(rerank_ranks)
         fr = row["rerank_first_rank"]
         row["rerank_RR"] = 1 / fr if fr else 0.0  # 平均後即為 MRR
- 
+
+        # 送給 LLM 的內容裡，相關條文找到幾成、是否全部找到
+        row[f"{CONTEXT}_recall"] = sum(in_context) / len(in_context)
+        row[f"{CONTEXT}_all_found"] = all(in_context)
+    # 送給 LLM 的內容大小
+    row[f"{CONTEXT}_條文數"] = len(context)
+    row[f"{CONTEXT}_字數"] = sum(len(text) for text, _ in context)
+
     row["retrieve前3名"] = top_labels(retrieved)
     row["rerank前3名"] = top_labels(reranked)
+    row["引用帶入的條文"] = top_labels(referenced, n=len(referenced))
     return row, article_rows
  
  
 # ---------- 匯總與輸出 ----------
  
 def build_summary(df: pd.DataFrame) -> pd.DataFrame:
-    metric_cols = [c for c in df.columns if "recall@" in c or "all_found@" in c or c == "rerank_RR" or "hit@" in c]
+    metric_cols = [c for c in df.columns if "recall@" in c or "all_found@" in c or c == "rerank_RR" or "hit@" in c
+                   or c.startswith(CONTEXT)]
     scored = df[df["相關條文數"] > 0]
     scored = scored.astype({c: float for c in metric_cols})
  
@@ -159,13 +178,15 @@ def format_workbook(writer: pd.ExcelWriter, sheets: dict[str, pd.DataFrame]) -> 
             longest = max([len(str(col))] + [len(str(v).split("\n")[0]) for v in df[col]])
             ws.column_dimensions[letter].width = min(max(10, longest * 1.6), 45)
  
-            is_pct = "recall@" in col or "all_found@" in col or "hit@" in col
+            is_pct = "recall@" in col or "all_found@" in col or "hit@" in col or col.endswith(("_recall", "_all_found"))
             for cell in ws[letter][1:]:
                 cell.alignment = Alignment(wrap_text=True, vertical="top")
                 if is_pct and isinstance(cell.value, (int, float)) and not isinstance(cell.value, bool):
                     cell.number_format = "0%"
                 elif col == "rerank_MRR" and isinstance(cell.value, float):
                     cell.number_format = "0.00"
+                elif col.endswith(("_條文數", "_字數")) and isinstance(cell.value, float):
+                    cell.number_format = "0.0"
  
  
 def main() -> None:
@@ -188,6 +209,8 @@ def main() -> None:
         {"參數": "TOP_K_RETRIEVED", "值": TOP_K_RETRIEVED},
         {"參數": "RETRIEVE_KS", "值": str(RETRIEVE_KS)},
         {"參數": "RERANK_KS", "值": str(RERANK_KS)},
+        {"參數": "送給 LLM 的 rerank 名次數", "值": TOP_K_CONTEXT},
+        {"參數": "引用展開最多補幾條", "值": MAX_REF_ADD},
     ])
  
     OUTPUT_DIR.mkdir(exist_ok=True)
@@ -213,12 +236,22 @@ def main() -> None:
         print(f"{col}: {overall[col]:.0%}"
             f"   全部找到@{k}: {overall[f'rerank_all_found@{k}']:.0%}")
     print(f"rerank MRR: {overall['rerank_MRR']:.2f}")
- 
-    missing = df_articles[df_articles["retrieve名次"].isna()]
-    if not missing.empty:
-        print(f"\n前 {TOP_K_RETRIEVED} 名都沒找到的條文：")
-        for _, m in missing.iterrows():
+    print(f"\n送給 LLM（rerank 前 {TOP_K_CONTEXT} 名 + 引用帶入）：")
+    print(f"  相關條文 recall: {overall[f'{CONTEXT}_recall']:.0%}   全部找到: {overall[f'{CONTEXT}_all_found']:.0%}")
+    print(f"  平均 {overall[f'{CONTEXT}_條文數']:.1f} 條、{overall[f'{CONTEXT}_字數']:.0f} 字")
+
+    by_ref = df_articles[df_articles["送給LLM"] == "引用帶入"]
+    if not by_ref.empty:
+        print("\n靠引用展開帶入的相關條文：")
+        for _, m in by_ref.iterrows():
             print(f"  {m['題號']}  {m['規章']} 第{m['條號']}條")
+
+    not_sent = df_articles[df_articles["送給LLM"] == "未送出"]
+    if not not_sent.empty:
+        print("\n沒有送給 LLM 的相關條文：")
+        for _, m in not_sent.iterrows():
+            rank = "前 %d 名都沒找到" % TOP_K_RETRIEVED if pd.isna(m["retrieve名次"]) else f"rerank 第 {int(m['rerank名次'])} 名"
+            print(f"  {m['題號']}  {m['規章']} 第{m['條號']}條（{rank}）")
  
     print(f"\n已輸出：{out_path}")
  
